@@ -4,6 +4,6 @@ namespace reader
     runtimeclass MainPage : Windows.UI.Xaml.Controls.Page
     {
         MainPage();
-        Int32 MyProperty;
+        //Int32 MyProperty;
     }
 }

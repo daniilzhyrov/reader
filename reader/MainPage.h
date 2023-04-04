@@ -6,16 +6,16 @@ namespace winrt::reader::implementation
 {
     struct MainPage : MainPageT<MainPage>
     {
-        MainPage()
-        {
-            // Xaml objects should not call InitializeComponent during construction.
-            // See https://github.com/microsoft/cppwinrt/tree/master/nuget#initializecomponent
-        }
+        MainPage();
 
-        int32_t MyProperty();
-        void MyProperty(int32_t value);
-
-        void ClickHandler(Windows::Foundation::IInspectable const& sender, Windows::UI::Xaml::RoutedEventArgs const& args);
+        void OnNavigatedTo(winrt::Windows::UI::Xaml::Navigation::NavigationEventArgs const& e);
+        void UpdateEmptyMessageVisibility();
+        void LoadRecentlyOpenedFiles();
+        fire_and_forget SaveRecentlyOpenedFile(hstring const& filePath);
+        fire_and_forget OpenComicAsync();
+        
+        void OpenComicButton_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
+        void CreateComicButton_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
     };
 }
 

@@ -2,6 +2,7 @@
 
 #include "App.h"
 #include "MainPage.h"
+#include <winrt/Windows.UI.ViewManagement.h>
 
 using namespace winrt;
 using namespace Windows::ApplicationModel;
@@ -12,6 +13,11 @@ using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::UI::Xaml::Navigation;
 using namespace reader;
 using namespace reader::implementation;
+using namespace Windows::UI::Core;
+using namespace Windows::UI::ViewManagement;
+
+float PREFERED_WINDOW_HEIGHT = 350;
+float PREFERED_WINDOW_WIDTH = 600;
 
 /// <summary>
 /// Creates the singleton application object.  This is the first line of authored code
@@ -91,6 +97,34 @@ void App::OnLaunched(LaunchActivatedEventArgs const& e)
             }
             // Ensure the current window is active
             Window::Current().Activate();
+        }
+    }
+    if (e.PrelaunchActivated() == false)
+    {
+        if (rootFrame.Content() == nullptr)
+        {
+            // When the navigation stack isn't restored navigate to the first page,
+            // configuring the new page by passing required information as a navigation
+            // parameter
+            rootFrame.Navigate(xaml_typename<reader::MainPage>(), box_value(e.Arguments()));
+        }
+
+        // Add the following lines:
+        auto appView = winrt::Windows::UI::ViewManagement::ApplicationView::GetForCurrentView();
+        appView.SetPreferredMinSize(winrt::Windows::Foundation::Size(PREFERED_WINDOW_WIDTH, PREFERED_WINDOW_HEIGHT));
+        winrt::Windows::UI::ViewManagement::ApplicationView::PreferredLaunchWindowingMode(ApplicationViewWindowingMode::PreferredLaunchViewSize);
+
+        // Place the frame in the current Window
+        Window::Current().Content(rootFrame);
+        // Ensure the current window is active
+        Window::Current().Activate();
+
+        Rect currentBounds = Window::Current().Bounds();
+        Size initialSize(PREFERED_WINDOW_WIDTH, PREFERED_WINDOW_HEIGHT);
+
+        if (currentBounds.Width != initialSize.Width || currentBounds.Height != initialSize.Height)
+        {
+            appView.TryResizeView(initialSize);
         }
     }
 }
