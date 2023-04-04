@@ -5,9 +5,32 @@
     xmlns:local="using:reader"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    mc:Ignorable="d">
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Button x:Name="myButton" Click="ClickHandler">Click Me</Button>
-    </StackPanel>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Grid.Column="0" Margin="20">
+            <TextBlock Text="Recent Books: " FontSize="24" FontWeight="Bold"/>
+            <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="4" HorizontalAlignment="Left">
+                <Image Source="Assets/Blank_Book.png" Width="150" Height="200" Margin="5,0,5,0" HorizontalAlignment="Left"/>
+                <Image Source="Assets/Blank_Book.png" Width="150" Height="200" Margin="175,0,5,0" HorizontalAlignment="Left"/>
+                <Image Source="Assets/Blank_Book.png" Width="150" Height="200" Margin="345,0,5,0" HorizontalAlignment="Left"/>
+                <Image Source="Assets/Blank_Book.png" Width="150" Height="200" Margin="515,0,5,0" HorizontalAlignment="Left"/>
+            </ItemsWrapGrid>
+            <TextBlock Text="Favourite Books: " FontSize="24" FontWeight="Bold" Margin="0,20,0,0"/>
+            <ItemsWrapGrid Orientation="Horizontal" MaximumRowsOrColumns="4">
+                <!-- Add your favorite book images here, in two rows -->
+            </ItemsWrapGrid>
+        </StackPanel>
+
+        <StackPanel Grid.Column="1" HorizontalAlignment="Center" Margin="20">
+            <Button x:Name="OpenaNewBook" Content="Open a New Book" Width="200" Height="50" Margin="0,0,0,20" Click="Click_OpenaNewBook"/>
+            <Button x:Name="CreateaNewBook" Content="Create a New Book" Width="200" Height="50" Click="Click_CreateaNewBook"/>
+        </StackPanel>
+    </Grid>
 </Page>

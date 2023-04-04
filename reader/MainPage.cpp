@@ -19,6 +19,16 @@ namespace winrt::reader::implementation
 
     void MainPage::ClickHandler(IInspectable const&, RoutedEventArgs const&)
     {
-        myButton().Content(box_value(L"Clicked"));
+        //myButton().Content(box_value(L"Clicked"));
+    }
+
+    void MainPage::Click_OpenaNewBook(IInspectable const&, RoutedEventArgs const&)
+    {
+        Frame().Navigate(xaml_typename<reader::ReadingInterface>());
+    }
+
+    void MainPage::Click_CreateaNewBook(IInspectable const&, RoutedEventArgs const&)
+    {
+        Frame().Navigate(xaml_typename<reader::CreateNewBook>());
     }
 }

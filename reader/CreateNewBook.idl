@@ -1,0 +1,9 @@
+namespace reader
+{
+    [default_interface]
+    runtimeclass CreateNewBook : Windows.UI.Xaml.Controls.Page
+    {
+        CreateNewBook();
+        Int32 MyProperty;
+    }
+}
