@@ -28,7 +28,7 @@ namespace winrt::reader::implementation
     {
     }
 
-    fire_and_forget MainPage::OpenComicAsync()
+    fire_and_forget MainPage::OpenComicButton_Click(IInspectable const&, RoutedEventArgs const&)
     {
         auto lifetime_token = get_weak();
 
@@ -43,34 +43,12 @@ namespace winrt::reader::implementation
         {
             hstring filePath = file.Path();
             SaveRecentlyOpenedFile(filePath);
-            //ContentFrame().Navigate(xaml_typename<reader::ReaderPage>(), box_value(filePath));
+            ContentFrame().Navigate(xaml_typename<reader::ReadingInterface>(), box_value(filePath));
         }
-    }
-
-    void MainPage::OpenComicButton_Click(IInspectable const&, RoutedEventArgs const&)
-    {
-        //auto lifetime_token = get_strong();
-
-        //FileOpenPicker openPicker;
-        //openPicker.ViewMode(PickerViewMode::Thumbnail);
-        //openPicker.SuggestedStartLocation(PickerLocationId::DocumentsLibrary);
-        //openPicker.FileTypeFilter().Append(L".cbz");
-        //openPicker.FileTypeFilter().Append(L".cbr");
-
-        //StorageFile file = co_await openPicker.PickSingleFileAsync();
-        //if (file)
-        //{
-        //    hstring filePath = file.Path();
-        //    SaveRecentlyOpenedFile(filePath);
-        //    LoadRecentlyOpenedFiles();
-        //    //ContentFrame().Navigate(xaml_typename<reader::ReaderPage>(), box_value(filePath));
-        //}
-        OpenComicAsync();
     }
 
     void MainPage::CreateComicButton_Click(IInspectable const&, RoutedEventArgs const&)
     {
-        // Navigate to Create Comic page
         //ContentFrame().Navigate(xaml_typename<reader::CreateComicPage>());
     }
 
@@ -96,66 +74,69 @@ namespace winrt::reader::implementation
         auto localSettings = ApplicationData::Current().LocalSettings();
         auto recentFilesValue = localSettings.Values().Lookup(L"RecentFiles");
 
+        RecentlyOpenedListBox().Items().Clear();
+
         if (recentFilesValue)
         {
-            IVector<IInspectable> recentFiles = unbox_value<IVector<IInspectable>>(recentFilesValue);
-            RecentlyOpenedListBox().Items().Clear();
-
-            for (unsigned int i = 0; i < recentFiles.Size(); ++i)
+            auto recentFilesComposite = unbox_value<ApplicationDataCompositeValue>(recentFilesValue);
+            unsigned int index = 0;
+            while (recentFilesComposite.HasKey(std::to_wstring(index)))
             {
-                hstring filePath = unbox_value<hstring>(recentFiles.GetAt(i));
+                hstring filePath = unbox_value<hstring>(recentFilesComposite.Lookup(std::to_wstring(index)));
                 RecentlyOpenedListBox().Items().Append(box_value(filePath));
+                ++index;
             }
         }
 
         UpdateEmptyMessageVisibility();
     }
 
-    fire_and_forget MainPage::SaveRecentlyOpenedFile(hstring const& filePath)
+    void MainPage::SaveRecentlyOpenedFile(hstring const& filePath)
     {
         auto lifetime_weak = get_weak();
 
         auto localSettings = ApplicationData::Current().LocalSettings();
         auto recentFilesValue = localSettings.Values().Lookup(L"RecentFiles");
 
-        IVector<hstring> recentFiles;
+        ApplicationDataCompositeValue recentFilesComposite;
 
         if (recentFilesValue)
         {
-            recentFiles = unbox_value<IVector<hstring>>(recentFilesValue);
+            recentFilesComposite = unbox_value<ApplicationDataCompositeValue>(recentFilesValue);
         }
         else
         {
-            recentFiles = single_threaded_vector<hstring>();
-            localSettings.Values().Insert(L"RecentFiles", box_value(recentFiles));
+            recentFilesComposite = ApplicationDataCompositeValue();
+            localSettings.Values().Insert(L"RecentFiles", box_value(recentFilesComposite));
         }
 
-        /*for (unsigned int i = 0; i < recentFiles.Size(); ++i)
+        bool found = false;
+        int index = -1;
+        while (recentFilesComposite.HasKey(std::to_wstring(++index)))
         {
-            hstring currentFilePath = unbox_value<hstring>(recentFiles.GetAt(i));
+            hstring currentFilePath = unbox_value<hstring>(recentFilesComposite.Lookup(std::to_wstring(index)));
             if (currentFilePath == filePath)
             {
-                co_await resume_foreground(Dispatcher());
-                if (auto lifetime_strong = lifetime_weak.get())
-                {
-                    RecentlyOpenedListBox().Items().RemoveAt(i);
-                }
+                found = true;
                 break;
             }
-        }*/
-
-        co_await resume_foreground(Dispatcher());
-        /*if (auto lifetime_strong = lifetime_weak.get())
-        {
-            RecentlyOpenedListBox().Items().Append(box_value(filePath));
         }
 
-        const unsigned int maxRecentFiles = 10;
-        while (recentFiles.Size() > maxRecentFiles)
+        if (!found)
         {
-            recentFiles.RemoveAt(0);
-        }*/
-        
+            recentFilesComposite.Insert(std::to_wstring(index), box_value(filePath));
+        }
+
+        const unsigned int maxRecentFiles = 5;
+        while (index > maxRecentFiles - 1)
+        {
+            recentFilesComposite.Remove(std::to_wstring(index - maxRecentFiles));
+            --index;
+        }
+
+        localSettings.Values().Insert(L"RecentFiles", box_value(recentFilesComposite));
+
+        LoadRecentlyOpenedFiles();
     }
 
 }

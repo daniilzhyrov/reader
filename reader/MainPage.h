@@ -11,10 +11,9 @@ namespace winrt::reader::implementation
         void OnNavigatedTo(winrt::Windows::UI::Xaml::Navigation::NavigationEventArgs const& e);
         void UpdateEmptyMessageVisibility();
         void LoadRecentlyOpenedFiles();
-        fire_and_forget SaveRecentlyOpenedFile(hstring const& filePath);
-        fire_and_forget OpenComicAsync();
+        void SaveRecentlyOpenedFile(hstring const& filePath);
         
-        void OpenComicButton_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
+        fire_and_forget OpenComicButton_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
         void CreateComicButton_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
     };
 }
