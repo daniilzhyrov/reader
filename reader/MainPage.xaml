@@ -7,36 +7,39 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Margin="0,0,0,10" Padding="20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
+    <Grid>
+        <Grid x:Name="MainGrid">
+            <Grid Margin="0,0,0,10" Padding="20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
 
-        <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical" Margin="10, 10, 35, 0" HorizontalAlignment="Center">
-            <Button x:Name="OpenComicButton" Content="Open Comic" MinWidth="180" Margin="0,5,0,5" Click="OpenComicButton_Click" />
-            <Button x:Name="CreateComicButton" Content="Create Comic" MinWidth="180" Margin="0,5,0,5" Click="CreateComicButton_Click" />
-        </StackPanel>
+                <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical" Margin="10, 10, 35, 0" HorizontalAlignment="Center">
+                    <Button x:Name="OpenComicButton" Content="Open Comic" MinWidth="180" Margin="0,5,0,5" Click="OpenComicButton_Click" />
+                    <Button x:Name="CreateComicButton" Content="Create Comic" MinWidth="180" Margin="0,5,0,5" Click="CreateComicButton_Click" />
+                </StackPanel>
 
-        <TextBlock Grid.Column="1" Grid.Row="0" Text="Recently Opened" Style="{ThemeResource SubtitleTextBlockStyle}" />
-        <ScrollViewer Grid.Column="1" Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <ListBox x:Name="RecentlyOpenedListBox" Height="250" Width="400"  Background="Transparent">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}" />
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </ScrollViewer>
-        <TextBlock x:Name="EmptyMessage" Grid.Column="1" Grid.Row="1" Text="No items to display." HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed" />
-        
+                <TextBlock Grid.Column="1" Grid.Row="0" Text="Recently Opened" Style="{ThemeResource SubtitleTextBlockStyle}" />
+                <ScrollViewer Grid.Column="1" Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                    <ListBox x:Name="RecentlyOpenedListBox" Height="250" Width="400"  Background="Transparent">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}" />
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </ScrollViewer>
+                <TextBlock x:Name="EmptyMessage" Grid.Column="1" Grid.Row="1" Text="No items to display." HorizontalAlignment="Center" VerticalAlignment="Center" Visibility="Collapsed" />
+            </Grid>
+        </Grid>
+
         <Frame x:Name="ContentFrame" />
-    
     </Grid>
 
 </Page>

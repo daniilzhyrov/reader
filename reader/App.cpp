@@ -39,6 +39,13 @@ App::App()
 #endif
 }
 
+#include <Windows.h>
+#include <winrt/Windows.ApplicationModel.h>
+#include <winrt/Windows.Storage.Streams.h>
+
+using namespace winrt::Windows::ApplicationModel;
+using namespace winrt::Windows::Storage::Streams;
+
 /// <summary>
 /// Invoked when the application is launched normally by the end user.  Other entry points
 /// will be used such as when the application is launched to open a specific file.

@@ -4,6 +4,5 @@ namespace reader
     runtimeclass ReadingInterface : Windows.UI.Xaml.Controls.Page
     {
         ReadingInterface();
-        Int32 MyProperty;
     }
 }
