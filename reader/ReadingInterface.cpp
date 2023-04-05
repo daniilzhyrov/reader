@@ -89,10 +89,11 @@ namespace winrt::reader::implementation
             hstring filePath = unbox_value<hstring>(e.Parameter());
             auto images = ReadImagesFromZipArchive(filePath);
 
-            for (const auto& image : images)
+            ComicImage().Source(*images.begin());
+            /*for (const auto& image : images)
             {
-                ComicImage().Source(image);
-            }
+                
+            }*/
         } else {
             std::cerr << "ERROR" << std::endl;
         }
