@@ -15,18 +15,11 @@
                     Width="150"
                     Height="50"
                     Click="Click_SelectImages"/>
-                <TextBlock x:Name="ImportImagesTextBlock"
+            <TextBlock x:Name="ImportImagesTextBlock"
                        Text="Please import the images"
                        HorizontalAlignment="Center"
                        Margin="0,20,0,20" />
-                <Button x:Name="SaveButton"
-                    Content="Save"
-                    HorizontalAlignment="Center"
-                    Width="150"
-                    Height="50"
-                    Background="DarkOrange"
-                    Click="Click_Save"/>
-            </StackPanel>
+        </StackPanel>
         </Grid>
     </Page>
 

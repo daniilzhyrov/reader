@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
+<Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"  xmlns:iot="http://schemas.microsoft.com/appx/manifest/iot/windows10"  xmlns:uap4="http://schemas.microsoft.com/appx/manifest/uap/windows10/4"  xmlns:uap3="http://schemas.microsoft.com/appx/manifest/uap/windows10/3"  xmlns:uap2="http://schemas.microsoft.com/appx/manifest/uap/windows10/2"  xmlns:uap6="http://schemas.microsoft.com/appx/manifest/uap/windows10/6" IgnorableNamespaces="uap mp iot uap4 uap3 uap2 uap6">
   <Identity
     Name="1d7296e7-0224-47e1-8f49-f9e48dfc53ac"
     Publisher="CN=danii"
@@ -26,9 +26,66 @@
         <uap:InitialRotationPreference>
           <uap:Rotation Preference="landscape"/></uap:InitialRotationPreference>
       </uap:VisualElements>
+      <Extensions>
+        <uap:Extension Category="windows.fileSavePicker">
+          <uap:FileSavePicker>
+            <uap:SupportedFileTypes>
+              <uap:SupportsAnyFileType/>
+            </uap:SupportedFileTypes>
+          </uap:FileSavePicker>
+        </uap:Extension>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="cbz-file">
+            <uap:SupportedFileTypes>
+              <uap:FileType ContentType="application/vnd.comicbook+zip">.cbz</uap:FileType>
+              <uap:FileType>.jpg</uap:FileType>
+              <uap:FileType>.png</uap:FileType>
+              <uap:FileType>.cbr</uap:FileType>
+            </uap:SupportedFileTypes>
+            <uap:DisplayName>Comic Book Archive (CBZ)</uap:DisplayName>
+            <uap:InfoTip>A comic book archive file in CBZ format</uap:InfoTip>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
+      </Extensions>
     </Application>
   </Applications>
   <Capabilities>
     <Capability Name="internetClient" />
+    <uap:Capability Name="picturesLibrary"/>
+    <Capability Name="codeGeneration"/>
+    <iot:Capability Name="systemManagement"/>
+    <uap:Capability Name="userAccountInformation"/>
+    <uap4:Capability Name="userDataTasks"/>
+    <uap3:Capability Name="userNotificationListener"/>
+    <uap:Capability Name="videosLibrary"/>
+    <uap:Capability Name="voipCall"/>
+    <uap:Capability Name="musicLibrary"/>
+    <uap:Capability Name="objects3D"/>
+    <uap4:Capability Name="offlineMapsManagement"/>
+    <uap:Capability Name="phoneCall"/>
+    <uap2:Capability Name="phoneCallHistoryPublic"/>
+    <Capability Name="privateNetworkClientServer"/>
+    <uap3:Capability Name="remoteSystem"/>
+    <uap:Capability Name="removableStorage"/>
+    <uap:Capability Name="sharedUserCertificates"/>
+    <uap2:Capability Name="spatialPerception"/>
+    <uap:Capability Name="contacts"/>
+    <uap:Capability Name="enterpriseAuthentication"/>
+    <uap6:Capability Name="graphicsCapture"/>
+    <Capability Name="internetClientServer"/>
+    <iot:Capability Name="lowLevelDevices"/>
+    <Capability Name="allJoyn"/>
+    <uap:Capability Name="appointments"/>
+    <uap3:Capability Name="backgroundMediaPlayback"/>
+    <uap:Capability Name="blockedChatMessages"/>
+    <uap:Capability Name="chat"/>
+    <DeviceCapability Name="location"/>
+    <DeviceCapability Name="pointOfService"/>
+    <DeviceCapability Name="proximity"/>
+    <DeviceCapability Name="gazeInput"/>
+    <DeviceCapability Name="lowLevel"/>
+    <DeviceCapability Name="microphone"/>
+    <DeviceCapability Name="bluetooth"/>
+    <DeviceCapability Name="webcam"/>
   </Capabilities>
 </Package>
