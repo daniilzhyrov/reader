@@ -2,6 +2,7 @@
 
 #include "App.h"
 #include "MainPage.h"
+#include <winrt/Windows.UI.ViewManagement.h>
 
 using namespace winrt;
 using namespace Windows::ApplicationModel;
@@ -12,6 +13,8 @@ using namespace Windows::UI::Xaml::Controls;
 using namespace Windows::UI::Xaml::Navigation;
 using namespace reader;
 using namespace reader::implementation;
+using namespace Windows::UI::Core;
+using namespace Windows::UI::ViewManagement;
 
 /// <summary>
 /// Creates the singleton application object.  This is the first line of authored code
@@ -32,6 +35,13 @@ App::App()
     });
 #endif
 }
+
+#include <Windows.h>
+#include <winrt/Windows.ApplicationModel.h>
+#include <winrt/Windows.Storage.Streams.h>
+
+using namespace winrt::Windows::ApplicationModel;
+using namespace winrt::Windows::Storage::Streams;
 
 /// <summary>
 /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -92,6 +102,21 @@ void App::OnLaunched(LaunchActivatedEventArgs const& e)
             // Ensure the current window is active
             Window::Current().Activate();
         }
+    }
+    if (e.PrelaunchActivated() == false)
+    {
+        if (rootFrame.Content() == nullptr)
+        {
+            // When the navigation stack isn't restored navigate to the first page,
+            // configuring the new page by passing required information as a navigation
+            // parameter
+            rootFrame.Navigate(xaml_typename<reader::MainPage>(), box_value(e.Arguments()));
+        }
+
+        // Place the frame in the current Window
+        Window::Current().Content(rootFrame);
+        // Ensure the current window is active
+        Window::Current().Activate();
     }
 }
 

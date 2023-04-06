@@ -1,0 +1,8 @@
+namespace reader
+{
+    [default_interface]
+    runtimeclass ReadingInterface : Windows.UI.Xaml.Controls.Page
+    {
+        ReadingInterface();
+    }
+}
