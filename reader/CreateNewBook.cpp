@@ -183,25 +183,66 @@ namespace winrt::reader::implementation
 
                 for (const auto& file : selectedFiles)
                 {
-                    // Open the image file for reading
-                    auto stream = co_await file.OpenReadAsync();
-                    auto inputStream = stream.GetInputStreamAt(0);
-                    auto dataReader = Windows::Storage::Streams::DataReader(inputStream);
+                    //--------ver1 buffer-------
+                    //// Open the image file for reading
+                    //auto stream = co_await file.OpenReadAsync();
+                    //auto inputStream = stream.GetInputStreamAt(0);
+                    //auto dataReader = Windows::Storage::Streams::DataReader(inputStream);
 
-                    // Read the image data
-                    co_await dataReader.LoadAsync(stream.Size());
-                    auto imageData = dataReader.DetachBuffer();
-                    std::vector<uint8_t> buffer(imageData.Length());
-                    auto dataReader2 = Windows::Storage::Streams::DataReader::FromBuffer(imageData);
-                    dataReader2.ReadBytes(buffer);
+                    //// Read the image data
+                    //co_await dataReader.LoadAsync(stream.Size());
+                    //auto imageData = dataReader.DetachBuffer();
+                    //std::vector<uint8_t> buffer(imageData.Length());
+                    //auto dataReader2 = Windows::Storage::Streams::DataReader::FromBuffer(imageData);
+                    //dataReader2.ReadBytes(buffer);
+
+                    //// Convert wide string to narrow string using Windows functions
+                    //int requiredSize = WideCharToMultiByte(CP_UTF8, 0, file.Name().c_str(), -1, nullptr, 0, nullptr, nullptr);
+                    //std::string narrowFileName(requiredSize, '\0');
+                    //WideCharToMultiByte(CP_UTF8, 0, file.Name().c_str(), -1, &narrowFileName[0], requiredSize, nullptr, nullptr);
+
+                    //// Add a new entry to the zip archive
+                    //zip_source_t* source = zip_source_buffer(archive, buffer.data(), buffer.size(), 0);
+
+                    //-------ver 2  zip_source_file ------------
+                    // Convert wide string to narrow string using Windows functions
+                    int requiredSize = WideCharToMultiByte(CP_UTF8, 0, file.Path().c_str(), -1, nullptr, 0, nullptr, nullptr);
+                    std::string narrowFilePath(requiredSize, '\0');
+                    WideCharToMultiByte(CP_UTF8, 0, file.Path().c_str(), -1, &narrowFilePath[0], requiredSize, nullptr, nullptr);
 
                     // Convert wide string to narrow string using Windows functions
-                    int requiredSize = WideCharToMultiByte(CP_UTF8, 0, file.Name().c_str(), -1, nullptr, 0, nullptr, nullptr);
+                    requiredSize = WideCharToMultiByte(CP_UTF8, 0, file.Name().c_str(), -1, nullptr, 0, nullptr, nullptr);
                     std::string narrowFileName(requiredSize, '\0');
                     WideCharToMultiByte(CP_UTF8, 0, file.Name().c_str(), -1, &narrowFileName[0], requiredSize, nullptr, nullptr);
 
                     // Add a new entry to the zip archive
-                    zip_source_t* source = zip_source_buffer(archive, buffer.data(), buffer.size(), 0);
+                    zip_source_t* source = zip_source_file(archive, narrowFilePath.c_str(), 0, -1);
+
+                    //-------ver 3 -------zip_source_filep-------
+                    //// Convert wide string to narrow string using Windows functions
+                    //int requiredSize = WideCharToMultiByte(CP_UTF8, 0, file.Name().c_str(), -1, nullptr, 0, nullptr, nullptr);
+                    //std::string narrowFileName(requiredSize, '\0');
+                    //WideCharToMultiByte(CP_UTF8, 0, file.Name().c_str(), -1, &narrowFileName[0], requiredSize, nullptr, nullptr);
+
+                    //// Open the file with the _wfopen function
+                    //FILE* fp = nullptr;
+                    //_wfopen_s(&fp, file.Path().c_str(), L"rb");
+
+                    //if (fp == nullptr)
+                    //{
+                    //    winrt::hstring msg = L"Error opening file for reading: " + file.Name();
+                    //    winrt::Windows::UI::Xaml::Controls::ContentDialog errorDialog;
+                    //    errorDialog.Title(box_value(L"Error"));
+                    //    errorDialog.Content(box_value(msg));
+                    //    errorDialog.CloseButtonText(L"OK");
+                    //    co_await errorDialog.ShowAsync();
+                    //    zip_close(archive);
+                    //    co_return;
+                    //}
+
+                    //// Add a new entry to the zip archive
+                    //zip_source_t* source = zip_source_filep(archive, fp, 0, -1);
+
                     if (source == nullptr)
                     {
                         winrt::hstring msg = L"Error creating zip source for file: " + file.Name();

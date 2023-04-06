@@ -28,9 +28,10 @@
             </ItemsWrapGrid>
         </StackPanel>
 
-        <StackPanel Grid.Column="1" HorizontalAlignment="Center" Margin="20">
-            <Button x:Name="OpenaNewBook" Content="Open a New Book" Width="200" Height="50" Margin="0,0,0,20" Click="Click_OpenaNewBook"/>
-            <Button x:Name="CreateaNewBook" Content="Create a New Book" Width="200" Height="50" Click="Click_CreateaNewBook"/>
+
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center" Margin="20">
+            <Button x:Name="OpenaNewBook" Content="Open Comic" Width="200" Height="50" Margin="0,0,0,20" Click="Click_OpenaNewBook"/>
+            <Button x:Name="CreateaNewBook" Content="Create Comic" Width="200" Height="50" Click="Click_CreateaNewBook"/>
         </StackPanel>
     </Grid>
 </Page>
