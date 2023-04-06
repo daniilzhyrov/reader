@@ -22,15 +22,23 @@
 
                 <StackPanel Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" Orientation="Vertical" Margin="10, 10, 35, 0" HorizontalAlignment="Center">
                     <Button x:Name="OpenComicButton" Content="Open Comic" MinWidth="180" Margin="0,5,0,5" Click="OpenComicButton_Click" />
-                    <Button x:Name="CreateComicButton" Content="Create Comic" MinWidth="180" Margin="0,5,0,5" Click="CreateComicButton_Click" />
+                    <!--Button x:Name="CreateComicButton" Content="Create Comic" MinWidth="180" Margin="0,5,0,5" Click="CreateComicButton_Click" /-->
                 </StackPanel>
 
                 <TextBlock Grid.Column="1" Grid.Row="0" Text="Recently Opened" Style="{ThemeResource SubtitleTextBlockStyle}" />
                 <ScrollViewer Grid.Column="1" Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                    <ListBox x:Name="RecentlyOpenedListBox" Height="250" Width="400"  Background="Transparent">
+                    <ListBox x:Name="RecentlyOpenedListBox"
+                             Height="250"
+                             Width="400"
+                             Background="Transparent"
+                             SelectionMode="Single"
+                             SelectionChanged="OnSelectionChanged">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding}" />
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Title, Mode=OneWay}" FontSize="18" />
+                                    <TextBlock Text="{Binding Subtitle, Mode=OneWay}" FontSize="14" />
+                                </StackPanel>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>

@@ -11,7 +11,12 @@
 #include "winrt/Windows.Foundation.Collections.h"
 #include "winrt/Windows.UI.Core.h"
 #include "winrt/Windows.System.h"
+#include <winrt/Windows.UI.ViewManagement.h>
+#include <winrt/base.h>
+#include <filesystem>
 
+#include <winrt/Windows.Foundation.h>
+//#include "ListItem.h"
 
 using namespace winrt;
 using namespace Windows::UI::Xaml;
@@ -20,12 +25,18 @@ using namespace winrt::Windows::UI::Xaml::Navigation;
 using namespace winrt::Windows::Storage;
 using namespace winrt::Windows::Storage::Pickers;
 using namespace winrt::Windows::Foundation::Collections;
+using namespace Windows::Storage::Streams;
+using namespace Windows::UI::ViewManagement;
+using namespace Windows::Foundation;
 
+float PREFERED_WINDOW_HEIGHT = 350;
+float PREFERED_WINDOW_WIDTH = 600;
 
 namespace winrt::reader::implementation
 {
     MainPage::MainPage()
     {
+        Loaded({ this, &MainPage::OnLoaded });
     }
 
     fire_and_forget MainPage::OpenComicButton_Click(IInspectable const&, RoutedEventArgs const&)
@@ -41,19 +52,30 @@ namespace winrt::reader::implementation
         StorageFile file = co_await openPicker.PickSingleFileAsync();
         if (file)
         {
-            hstring filePath = file.Path();
-            SaveRecentlyOpenedFile(filePath);
-            ContentFrame().Navigate(xaml_typename<reader::ReadingInterface>(), box_value(filePath));
+            auto randomAccessStream = co_await file.OpenAsync(FileAccessMode::Read);
+            SaveRecentlyOpenedFile(file.Path());
+
+            ContentFrame().Navigate(xaml_typename<reader::ReadingInterface>(), box_value(randomAccessStream));
         }
     }
 
-    void MainPage::CreateComicButton_Click(IInspectable const&, RoutedEventArgs const&)
-    {
-        //ContentFrame().Navigate(xaml_typename<reader::CreateComicPage>());
+    void MainPage::OnSelectionChanged(IInspectable const& sender, SelectionChangedEventArgs const& e) {
     }
 
-    void MainPage::OnNavigatedTo(NavigationEventArgs const& e)
+    void MainPage::OnLoaded(IInspectable const& sender, RoutedEventArgs const& args)
     {
+        auto appView = winrt::Windows::UI::ViewManagement::ApplicationView::GetForCurrentView();
+        appView.SetPreferredMinSize(winrt::Windows::Foundation::Size(PREFERED_WINDOW_WIDTH, PREFERED_WINDOW_HEIGHT));
+        winrt::Windows::UI::ViewManagement::ApplicationView::PreferredLaunchWindowingMode(ApplicationViewWindowingMode::PreferredLaunchViewSize);
+        Rect currentBounds = Window::Current().Bounds();
+        Size initialSize(PREFERED_WINDOW_WIDTH, PREFERED_WINDOW_HEIGHT);
+
+        if (currentBounds.Width != initialSize.Width || currentBounds.Height != initialSize.Height)
+        {
+            auto result = appView.TryResizeView(initialSize);
+            currentBounds = Window::Current().Bounds();
+        }
+
         LoadRecentlyOpenedFiles();
     }
 
@@ -69,13 +91,26 @@ namespace winrt::reader::implementation
         }
     }
 
+    winrt::hstring GetFileNameFromPath(const winrt::hstring& path)
+    {
+        // Convert the hstring to std::wstring
+        std::wstring wstrPath(path);
+
+        // Use the std::filesystem::path class to get the filename
+        std::filesystem::path fsPath(wstrPath);
+        std::wstring fileName = fsPath.filename().wstring();
+
+        // Convert the std::wstring back to an hstring
+        return winrt::hstring(fileName);
+    }
+
     void MainPage::LoadRecentlyOpenedFiles()
     {
         auto localSettings = ApplicationData::Current().LocalSettings();
         auto recentFilesValue = localSettings.Values().Lookup(L"RecentFiles");
 
         RecentlyOpenedListBox().Items().Clear();
-
+        recentItems = single_threaded_vector<hstring>();
         if (recentFilesValue)
         {
             auto recentFilesComposite = unbox_value<ApplicationDataCompositeValue>(recentFilesValue);
@@ -83,7 +118,11 @@ namespace winrt::reader::implementation
             while (recentFilesComposite.HasKey(std::to_wstring(index)))
             {
                 hstring filePath = unbox_value<hstring>(recentFilesComposite.Lookup(std::to_wstring(index)));
-                RecentlyOpenedListBox().Items().Append(box_value(filePath));
+                recentItems.Append(filePath);
+                PropertySet item;
+                item.Insert(L"Title", box_value(GetFileNameFromPath(filePath)));
+                item.Insert(L"Subtitle", box_value(filePath));
+                RecentlyOpenedListBox().Items().Append(item);
                 ++index;
             }
         }
@@ -109,6 +148,8 @@ namespace winrt::reader::implementation
             recentFilesComposite = ApplicationDataCompositeValue();
             localSettings.Values().Insert(L"RecentFiles", box_value(recentFilesComposite));
         }
+        recentFilesComposite = ApplicationDataCompositeValue();
+        localSettings.Values().Insert(L"RecentFiles", box_value(recentFilesComposite));
 
         bool found = false;
         int index = -1;

@@ -8,13 +8,15 @@ namespace winrt::reader::implementation
     {
         MainPage();
 
-        void OnNavigatedTo(winrt::Windows::UI::Xaml::Navigation::NavigationEventArgs const& e);
+        void OnLoaded(winrt::Windows::Foundation::IInspectable const&, winrt::Windows::UI::Xaml::RoutedEventArgs const&);
         void UpdateEmptyMessageVisibility();
         void LoadRecentlyOpenedFiles();
         void SaveRecentlyOpenedFile(hstring const& filePath);
         
-        fire_and_forget OpenComicButton_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
-        void CreateComicButton_Click(winrt::Windows::Foundation::IInspectable const& sender, winrt::Windows::UI::Xaml::RoutedEventArgs const& e);
+        fire_and_forget OpenComicButton_Click(winrt::Windows::Foundation::IInspectable const&, winrt::Windows::UI::Xaml::RoutedEventArgs const&);
+        void OnSelectionChanged(winrt::Windows::Foundation::IInspectable const&, winrt::Windows::UI::Xaml::Controls::SelectionChangedEventArgs const&);
+    private:
+        winrt::Windows::Foundation::Collections::IVector<hstring> recentItems;
     };
 }
 

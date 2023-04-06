@@ -26,6 +26,17 @@
         <uap:InitialRotationPreference>
           <uap:Rotation Preference="landscape"/></uap:InitialRotationPreference>
       </uap:VisualElements>
+      <Extensions>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="zip_archives">
+            <uap:SupportedFileTypes>
+              <uap:FileType>.cbz</uap:FileType>
+            </uap:SupportedFileTypes>
+            <uap:DisplayName>zip archives</uap:DisplayName>
+            <uap:Logo></uap:Logo>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
+      </Extensions>
     </Application>
   </Applications>
   <Capabilities>

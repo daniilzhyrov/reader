@@ -6,13 +6,27 @@
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
     <Grid MinHeight="100" MinWidth="100">
-        <Image
-            x:Name="ComicImage"
-            Source="ms-appx://Assets/4.jpg"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Stretch="Uniform"
-            Margin="50,80,50,50"/>
+        <ScrollViewer x:Name="ImageScrollViewer" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <Grid HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Image Grid.Column="0"
+                    x:Name="ComicImageOne"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Stretch="Uniform"/>
+
+                <Image Grid.Column="1"
+                    x:Name="ComicImageTwo"
+                    Visibility="Collapsed"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    Stretch="Uniform"/>
+            </Grid>
+        </ScrollViewer>
 
         <StackPanel
             HorizontalAlignment="Left"
@@ -25,55 +39,56 @@
                 Background="DarkOrange"
                 Width="80"
                 Height="35"
-                Margin="2"/>
+                Margin="2"
+                Click="BackButtonClicked"/>
             <Button
                 x:Name="ZoomIn"
                 Content="+"
                 Width="35"
                 Height="35"
-                Margin="2"/>
+                Margin="2"
+                Background="Gray"
+                Click="ZoomInButtonClicked" />
             <Button
                 x:Name="ZoomOut"
                 Content="-"
                 Width="35"
                 Height="35"
-                Margin="2"/>
+                Margin="2"
+                Background="Gray"
+                Click="ZoomOutButtonClicked" />
             <Button
                 x:Name="FirstPage"
                 Content="&#x7C;&lt;"
                 Width="35"
                 Height="35"
-                Margin="2"/>
+                Margin="2"
+                Background="Gray"
+                Click="FirstPageButtonClicked"/>
             <Button
                 x:Name="LastPage"
                 Content="&gt;&#x7C;"
                 Width="35"
                 Height="35"
-                Margin="2"/>
+                Margin="2"
+                Background="Gray"
+                Click="LastPageButtonClicked"/>
             <Button
                 x:Name="FitPage"
                 Content="Fit Page"
                 Width="80"
                 Height="35"
-                Margin="2"/>
+                Margin="2"
+                Background="Gray"
+                Click="FitPageButtonClicked"/>
             <Button
                 x:Name="SingleDoublePageMode"
                 Content="Single/Double Page Mode"
                 Width="200"
                 Height="35"
-                Margin="2"/>
-            <Button
-                x:Name="BookMark"
-                Content="Book Mark"
-                Width="100"
-                Height="35"
-                Margin="2"/>
-            <Button
-                x:Name="Catagory"
-                Content="Catagory"
-                Width="80"
-                Height="35"
-                Margin="2"/>
+                Margin="2"
+                Background="Gray"
+                Click="SingleDoublePageModeButtonClicked"/>
         </StackPanel>
 
         <Button
@@ -83,7 +98,9 @@
             VerticalAlignment="Center"
             Width="100"
             Height="50"
-            Margin="10,0,0,0"/>
+            Margin="10,0,0,0"
+            Background="Gray"
+            Click="OnPreviousButtonClicked"/>
 
         <Button
             x:Name="NextPageButton"
@@ -92,6 +109,8 @@
             VerticalAlignment="Center"
             Width="100"
             Height="50"
-            Margin="0,0,10,0"/>
+            Margin="0,0,10,0"
+            Background="Gray"
+            Click="OnNextButtonClicked"/>
     </Grid>
 </Page>
