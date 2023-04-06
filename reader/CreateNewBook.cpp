@@ -122,75 +122,6 @@ namespace winrt::reader::implementation
 
     winrt::fire_and_forget CreateNewBook::Click_SelectImages(IInspectable const&, RoutedEventArgs const&)
     {
-//        int err = 0;
-//        const char* temp_folder = "C:\\Users\\shi67\\Pictures\\Temp";
-//#ifdef _WIN32
-//        _putenv_s("TMP", temp_folder);
-//        _putenv_s("TEMP", temp_folder);
-//#else
-//        setenv("TMP", temp_folder, 1);
-//        setenv("TEMP", temp_folder, 1);
-//#endif
-//        std::string temp_archive_path = std::string(temp_folder) + "\\test_archive.cbz";
-//        zip_t* test_archive = zip_open(temp_archive_path.c_str(), ZIP_CREATE | ZIP_EXCL, &err);
-//        if (test_archive == nullptr)
-//        {
-//            winrt::hstring msg = L"test_archive == nullptr";
-//            winrt::Windows::UI::Xaml::Controls::ContentDialog errorDialog;
-//            errorDialog.Title(box_value(L"Error"));
-//            errorDialog.Content(box_value(msg));
-//            errorDialog.CloseButtonText(L"OK");
-//            co_await errorDialog.ShowAsync();
-//            co_return;
-//        }
-//
-//        std::string sample_data = "This is a sample text file.";
-//        std::string file_name = "sample.txt";
-//
-//        zip_source_t* source = zip_source_buffer(test_archive, sample_data.c_str(), sample_data.size(), 0);
-//        if (source == nullptr)
-//        {
-//            winrt::hstring msg = L"Error creating zip source.";
-//            winrt::Windows::UI::Xaml::Controls::ContentDialog errorDialog;
-//            errorDialog.Title(box_value(L"Error"));
-//            errorDialog.Content(box_value(msg));
-//            errorDialog.CloseButtonText(L"OK");
-//            co_await errorDialog.ShowAsync();
-//            co_return;
-//        }
-//
-//        zip_int64_t index = zip_file_add(test_archive, file_name.c_str(), source, ZIP_FL_ENC_UTF_8);
-//        if (index < 0)
-//        {
-//            winrt::hstring msg = L"Error adding file to archive.";
-//            winrt::Windows::UI::Xaml::Controls::ContentDialog errorDialog;
-//            errorDialog.Title(box_value(L"Error"));
-//            errorDialog.Content(box_value(msg));
-//            errorDialog.CloseButtonText(L"OK");
-//            co_await errorDialog.ShowAsync();
-//            co_return;
-//        }
-//
-//        int close_result = zip_close(test_archive);
-//        if (close_result != 0)
-//        {
-//            zip_error_t* error = zip_get_error(test_archive);
-//            const char* error_str = zip_error_strerror(error);
-//
-//            // Convert the error message to a wide string
-//            int requiredSize = MultiByteToWideChar(CP_UTF8, 0, error_str, -1, nullptr, 0);
-//            std::wstring wideErrorMsg(requiredSize, L'\0');
-//            MultiByteToWideChar(CP_UTF8, 0, error_str, -1, &wideErrorMsg[0], requiredSize);
-//
-//            winrt::hstring msg = L"Error closing archive: " + winrt::hstring(wideErrorMsg);
-//            winrt::Windows::UI::Xaml::Controls::ContentDialog errorDialog;
-//            errorDialog.Title(box_value(L"Error"));
-//            errorDialog.Content(box_value(msg));
-//            errorDialog.CloseButtonText(L"OK");
-//            co_await errorDialog.ShowAsync();
-//            co_return;
-//
-//        }
 
         // Create a FileOpenPicker instance
         Windows::Storage::Pickers::FileOpenPicker filePicker;
@@ -294,6 +225,7 @@ namespace winrt::reader::implementation
                         co_await errorDialog.ShowAsync();
                         co_return;
                     }
+                    zip_source_free(source);
                 }
 
                 if (archive == nullptr)
@@ -307,8 +239,10 @@ namespace winrt::reader::implementation
                     co_return;
                 }
 
-                zip_close(archive);
-                /*if (zip_close(archive) == -1)
+                zip_int64_t num_entries = zip_get_num_entries(archive, 0);
+
+                int close_result = zip_close(archive);
+                if (close_result == -1)
                 {
                     const char* error_str = zip_strerror(archive);
                     winrt::hstring errorMsg = winrt::to_hstring(error_str);
@@ -316,10 +250,10 @@ namespace winrt::reader::implementation
                     winrt::Windows::UI::Xaml::Controls::ContentDialog errorDialog;
                     errorDialog.Title(box_value(L"Error"));
                     errorDialog.Content(box_value(msg));
-                    errorDialog.CloseButtonText(L"OK");
+                    errorDialog.CloseButtonText(L"OK"); 
                     co_await errorDialog.ShowAsync();
                     co_return;
-                }*/
+                }
             }
         }
     }
